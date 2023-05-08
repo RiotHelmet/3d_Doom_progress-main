@@ -1,0 +1,20 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+canvas {
+  border: 2px solid black;
+  cursor: none;
+  margin: 5px;
+  image-rendering: pixelated;
+}
+
+#canvas {
+  width: 1000px;
+  height: 750px;
+}
