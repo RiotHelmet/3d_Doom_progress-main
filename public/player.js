@@ -12,10 +12,14 @@ class Player {
   tilt = 0;
   shape;
 
+  alive = true;
+  health = 100;
+
   animation = new animation_info();
 
   constructor(_id) {
     this.id = _id;
+
     if (this.id !== clientID) {
       this.shape = new object(
         [
@@ -44,6 +48,20 @@ class Player {
       players.push(this);
     }
   }
+
+  shoot() {
+    if (!justShot) {
+      let HIT = raycast(this.position, this.rotation)
+
+      if(HIT.isPlayer) {
+        console.log(HIT.parent.id)
+        socket.emit("raycastHIT", {ID : HIT.parent.id, shooterID : this.id})
+      }
+
+    }
+    justShot = true;
+  }
+
 }
 
 function raycast(origin, dir) {
@@ -87,9 +105,7 @@ function raycast(origin, dir) {
       u /= (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
 
       if (0 <= t && t <= 1 && 0 <= u && u <= 1) {
-        console.log(Object);
-
-        return true;
+        return Object;
       }
     }
   }
@@ -115,12 +131,16 @@ function updateOtherPlayers(ID, position, rotation) {
 }
 
 function CirclevsOBB(_Circle, _OBB) {
-  if (
-    _Circle.position.z + 5 > _OBB.position.z + _OBB.height ||
-    _Circle.position.z < _OBB.position.z
-  ) {
-    return false;
-  }
+
+  // if(_Circle.position.z < _OBB.position.z) {
+  //   if (
+  //     _Circle.position.z + 5 > _OBB.position.z + _OBB.height
+  //   ) {
+  //     return false;
+  //   }
+  // }
+
+
 
   let closestDist = Infinity;
   let closestPoint;
@@ -129,18 +149,21 @@ function CirclevsOBB(_Circle, _OBB) {
 
   normals = [];
   faces = [];
+  vertices = [];
+
 
   collisionNormal = {
     x: _Circle.position.x - _OBB.position.x,
     y: _Circle.position.y - _OBB.position.y,
   };
 
+
   for (let i = 0; i < _OBB.faces.length; i++) {
     vertex_A = {
       x: _OBB.faces[i][0].x + _OBB.position.x,
       y: _OBB.faces[i][0].y + _OBB.position.y,
     };
-
+    vertices.push(vertex_A)
     vertex_B = {
       x: _OBB.faces[i][1].x + _OBB.position.x,
       y: _OBB.faces[i][1].y + _OBB.position.y,
@@ -156,6 +179,8 @@ function CirclevsOBB(_Circle, _OBB) {
     }
   }
 
+  if((_Circle.position.z >= _OBB.position.z &&  _Circle.position.z + 20 <= _OBB.position.z + _OBB.height)) 
+  {
   for (let i = 0; i < faces.length; i++) {
     distSqrd = pDistance(
       _Circle.position.x,
@@ -171,10 +196,12 @@ function CirclevsOBB(_Circle, _OBB) {
     }
   }
   if (closestDist < player_radius ** 2) {
+
     normal = new Vec2(
       closestPoint.x - _Circle.position.x,
       closestPoint.y - _Circle.position.y
     ).normalize();
+
 
     penetrationDepth = player_radius - Math.sqrt(closestDist);
 
@@ -186,6 +213,7 @@ function CirclevsOBB(_Circle, _OBB) {
       (Math.max(penetrationDepth - buffer, 0) / (1 + 0)) * percent
     );
 
+
     _Circle.position = {
       x: _Circle.position.x - correction.x,
       y: _Circle.position.y - correction.y,
@@ -193,7 +221,41 @@ function CirclevsOBB(_Circle, _OBB) {
     };
 
     return true;
+  }}
+
+  
+
+  next = 0;
+  let collision = false
+
+  for (current=0; current<vertices.length; current++) {
+    // get next vertex in list
+    // if we've hit the end, wrap around to 0
+    next = current+1;
+    if (next == vertices.length) next = 0;
+
+    // get the PVectors at our current position
+    // this makes our if statement a little cleaner
+    vc = vertices[current];    // c for "current"
+    vn = vertices[next];       // n for "next"
+
+    // compare position, flip 'collision' variable
+    // back and forth
+
+    // console.log(vc, vn)
+
+    if (((vc.y > _Circle.position.y && vn.y < _Circle.position.y) || (vc.y < _Circle.position.y && vn.y > _Circle.position.y)) &&
+         (_Circle.position.x < (vn.x-vc.x)*(_Circle.position.y-vc.y) / (vn.y-vc.y)+vc.x)) {
+            collision = !collision;
+    
+    }
   }
+  
+  if(collision) {
+    _Circle.position.z = _OBB.position.z + _OBB.height
+    return true
+  }
+
   return false;
 }
 

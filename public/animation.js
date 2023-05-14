@@ -1,11 +1,6 @@
 canvas = document.getElementById("canvas");
 ctx = canvas.getContext("2d");
 
-let image_doom = new Image();
-image_doom.src = "doom_guy.png";
-
-image_doom.onload = () => {};
-
 let animation_sheet = new Image();
 animation_sheet.src = "images/animation_sheet.png";
 
@@ -22,10 +17,12 @@ blood_sprite.src = "images/blood_sprite.png";
 blood_sprite.onload = () => {};
 
 function animation(player, rotation, x, y, sizex, sizey) {
+
   rotation = Math.abs(rotation);
   if (player.animation.idle) {
     if (180 - 45 < rotation && rotation < 180 + 45) {
       //front
+
       ctx.drawImage(
         animation_sheet,
         0,

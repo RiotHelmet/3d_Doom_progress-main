@@ -8,12 +8,53 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <canvas id="canvas" width="400" height="300"></canvas>
-    <canvas id="canvas_2D_map" width="400" height="400"></canvas>
+    <div id="settingsMenu">
+      <h1>Settings</h1>
+    </div>
 
-    <script src="setup.js"></script>
+    <div id="loginMenu">
+      <h1>Login</h1>
+      <form id="loginForm" action="" method="">
+        <div class="container">
+          <label><b>Username</b></label>
+          <input
+            type="text"
+            placeholder="Enter Username"
+            id="unameInput"
+            required
+          />
+
+          <label><b>Password</b></label>
+          <input
+            type="password"
+            placeholder="Enter Password"
+            id="pwordInput"
+            required
+          />
+
+          <button type="submit">Login</button>
+        </div>
+      </form>
+    </div>
+
+    
+    <div id="leaderboard">
+    </div>
+
+    <h1 id="healthCount"></h1>
+    <canvas id="canvas" width="384" height="216"></canvas>
+    <!-- <canvas id="canvas_2D_map" width="400" height="400"></canvas> -->
+
 
     <script src="/socket.io/socket.io.js"></script>
+    <script src="setup.js"></script>
+
+    <!-- Login page -->
+
+    <script src="loginScript.js"></script>
+
+    <!-- Game Script -->
+
     <script src="math_functions.js"></script>
     <script src="animation.js"></script>
     <script src="socketIO.js"></script>

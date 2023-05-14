@@ -87,8 +87,8 @@ function draw2d() {
   ctx_2d.stroke();
 }
 
-function drawSurface(vertices) {
-  ctx.fillStyle = "red";
+function drawSurface(vertices, color) {
+  ctx.fillStyle = color;
   ctx.beginPath();
 
   ctx.moveTo(vertices[0].x, vertices[0].y);
@@ -308,7 +308,7 @@ function draw3d(Object) {
   }
 
   if (surface !== 0 && pairs.length > 0) {
-    drawSurface(pairs);
+    drawSurface(pairs, Object.faceColors[Object.faceColors.length - 1]);
   }
 
   Object.distance /= Object.faces.length;
