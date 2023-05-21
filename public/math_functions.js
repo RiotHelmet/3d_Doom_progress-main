@@ -1,4 +1,4 @@
-let canvas = document.getElementById("canvas");
+let canvas = document.getElementById("canvas_game");
 let ctx = canvas.getContext("2d");
 
 function degToRad(deg) {

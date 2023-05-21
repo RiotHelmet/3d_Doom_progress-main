@@ -6,56 +6,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
   </head>
   <body>
-    <div id="settingsMenu">
-      <h1>Settings</h1>
+
+    <div id="editor_Body">
+      <div id="settings"></div>
+
+      <div id="selectObject"> 
+        <div id="selectObjectHeader" class="select_header">
+          <i class="fa fa-times" aria-hidden="true" onclick="document.getElementById('selectObject').style.display = 'none'"></i>
+        </div>
+        <div class="select_body">
+          <p>Height: <input type="number" id="heightInput" value="50"></p>
+
+          <p>X: <input type="number" id="positionX" step="5" value="0"></p>
+          <p>Y: <input type="number" id="positionY" step="5" value="0"></p>
+          <p>Z: <input type="number" id="positionZ" step="5" value="0"></p>
+  
+          <p onclick="editor.menuObject.points.reverse(), editor.menuObject.updatePoints()">Reverse</p>
+          <p>Floor: <input type="checkbox" id="isFloor"></p>
+          <p onclick="objects.splice(objects.indexOf(editor.menuObject), 1)">DELETE</p>
+  
+        </div>
+  
+      </div>
+  
+      <div id="selectPoint"> 
+        <div id="selectPointHeader" class="select_header">
+          <i class="fa fa-times" aria-hidden="true" onclick="document.getElementById('selectPoint').style.display = 'none'"></i>
+        </div>
+        <div class="select_body">
+          <p>X: <input type="number" id="xInput" step="5" value="0"></p><p>Y: <input type="number" id="yInput" value="0" step="5"></p>
+        </div>
+      </div>
+  
+      <div id="selectEdge"> 
+        <div id="selectEdgeHeader" class="select_header">
+          <i class="fa fa-times" aria-hidden="true" onclick="document.getElementById('selectEdge').style.display = 'none'"></i>
+        </div>
+        <div class="select_body">
+          <p>Visible: <input type="checkbox" id="edgeVisibility" checked></p>
+        </div>
+      </div>
+
+      <div id="imageUploaderBackground">
+        <div id="imageUploader">
+            <input id="uploader" type="file" required>
+        </div>
+        <div id="imageUploadClose" onclick="document.getElementById('imageUploaderBackground').style.display = 'none'"></div>
+      </div>
+  
+      <div id="canvasContainer">
+        <!-- <div id="toolContainer"> -->
+          <div id="toolBar">
+            <div class="toolButton" id="select_points" onclick=" currentStyle = 'select', this.style.border = '1px solid red', document.getElementById('add_points').style.border = '1px solid black'">
+              <i class="fa fa-mouse-pointer" aria-hidden="true"></i>
+            </div>
+            <div class="toolButton" id="add_points" onclick=" currentStyle = 'add', this.style.border = '1px solid red', document.getElementById('select_points').style.border = '1px solid black'">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </div>
+            <div class="toolButton" id="add_image" onclick="document.getElementById('imageUploaderBackground').style.display = 'flex'">
+              <i class="fa fa-picture-o" aria-hidden="true"></i>
+            </div>
+            <div class="toolButton" id="save" onclick="editor.saveData()">
+              <i class="fa fa-save" aria-hidden="true"></i>
+            </div>
+          </div>
+          <!-- <div id="extraTools_add"> -->
+          <!-- </div> -->
+        <!-- </div> -->
+        <canvas id="canvas_editor" width="750" height="750"></canvas>
+      </div>
     </div>
 
-    <div id="loginMenu">
-      <h1>Login</h1>
-      <form id="loginForm" action="" method="">
-        <div class="container">
-          <label><b>Username</b></label>
-          <input
-            type="text"
-            placeholder="Enter Username"
-            id="unameInput"
-            required
-          />
-
-          <label><b>Password</b></label>
-          <input
-            type="password"
-            placeholder="Enter Password"
-            id="pwordInput"
-            required
-          />
-
-          <button type="submit">Login</button>
-        </div>
-      </form>
+    <div id="game_Body">
+      <div id="settingsMenu">
+        <h1>Settings</h1>
+      </div>
+  
+      
+      <div id="leaderboard">
+      </div>
+  
+      <h1 id="healthCount"></h1>
+      <canvas id="canvas_game" width="384" height="216"></canvas>
+      <canvas id="canvas_2D_map" width="200" height="200"></canvas> 
     </div>
 
     
-    <div id="leaderboard">
-    </div>
 
-    <h1 id="healthCount"></h1>
-    <canvas id="canvas" width="384" height="216"></canvas>
-    <!-- <canvas id="canvas_2D_map" width="400" height="400"></canvas> -->
-
-
+    <!-- Game -->
+    <script src="math_functions.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="setup.js"></script>
 
-    <!-- Login page -->
+    <script src="editor.js"></script>
 
-    <script src="loginScript.js"></script>
+
 
     <!-- Game Script -->
 
-    <script src="math_functions.js"></script>
     <script src="animation.js"></script>
     <script src="socketIO.js"></script>
     <script src="object.js"></script>

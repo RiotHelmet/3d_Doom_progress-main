@@ -1,4 +1,4 @@
-canvas = document.getElementById("canvas");
+canvas = document.getElementById("canvas_game");
 ctx = canvas.getContext("2d");
 
 let animation_sheet = new Image();

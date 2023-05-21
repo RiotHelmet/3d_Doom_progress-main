@@ -11,6 +11,8 @@ class Player {
   rotation = 0;
   tilt = 0;
   shape;
+  speed = 1;
+  onGround = true
 
   alive = true;
   health = 100;
@@ -145,7 +147,7 @@ function CirclevsOBB(_Circle, _OBB) {
   let closestDist = Infinity;
   let closestPoint;
 
-  player_radius = 10;
+  player_radius = 30;
 
   normals = [];
   faces = [];
@@ -174,12 +176,13 @@ function CirclevsOBB(_Circle, _OBB) {
       .normal()
       .mult(-1);
 
-    if (DotProduct(collisionNormal, face_normal) > 0) {
+    // if (DotProduct(collisionNormal, face_normal) > 0)
+     {
       faces.push([vertex_A, vertex_B, face_normal]);
     }
   }
 
-  if((_Circle.position.z >= _OBB.position.z &&  _Circle.position.z + 20 <= _OBB.position.z + _OBB.height)) 
+  if((_Circle.position.z >= _OBB.position.z &&  _Circle.position.z + 90 <= _OBB.position.z + _OBB.height)) 
   {
   for (let i = 0; i < faces.length; i++) {
     distSqrd = pDistance(
@@ -219,7 +222,6 @@ function CirclevsOBB(_Circle, _OBB) {
       y: _Circle.position.y - correction.y,
       z: _Circle.position.z,
     };
-
     return true;
   }}
 
@@ -252,16 +254,25 @@ function CirclevsOBB(_Circle, _OBB) {
   }
   
   if(collision) {
-    _Circle.position.z = _OBB.position.z + _OBB.height
-    return true
+    if(_Circle.position.z + 90 > _OBB.position.z + _OBB.height && _OBB.position.z + _OBB.height > _Circle.position.z) {
+      _Circle.position.z = _OBB.position.z + _OBB.height
+      return true
+    } else if( _OBB.position.z + _OBB.height + deltaT < _Circle.position.z){
+      _Circle.position.z -= deltaT
+    }
   }
 
   return false;
+
 }
+
+sensitivity = 20;
 
 function updatePlayerMovement() {
   let walking = false;
-  let speed = 5;
+  let speed = (deltaT * player.speed) / 1.5;
+
+
 
   dx = Math.sin(degToRad(player.rotation)) * speed;
   dy = Math.cos(degToRad(player.rotation)) * speed;
@@ -298,7 +309,7 @@ function updatePlayerMovement() {
     // player.position.z += 10;
   }
 
-  player.rotation += deltaMouse.x / 5;
+  player.rotation += (deltaMouse.x / sensitivity) * deltaT;
 
   // player.tilt += deltaMouse.y / 5;
 

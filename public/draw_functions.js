@@ -1,3 +1,4 @@
+
 function drawWall(vertices, color) {
   ctx.beginPath();
 
@@ -7,8 +8,11 @@ function drawWall(vertices, color) {
   ctx.lineTo(vertices[2].x, vertices[2].y);
 
   ctx.fillStyle = color;
+  // ctx.stroke()
   ctx.fill();
 }
+
+
 
 function draw2d() {
   ctx_2d.beginPath();
@@ -260,6 +264,10 @@ function draw3d(Object) {
     } else if (surface == 2) {
       pairs.push(p1);
       pairs.push(p2);
+    }
+
+    if(Object.faceColors[i] == "none") {
+      continue;
     }
 
     if (surfaceNormal.x * viewVector.x + surfaceNormal.y * viewVector.y < 0) {
